@@ -1,3 +1,4 @@
+# https://leetcode.com/problems/generate-parentheses/description/?envType=problem-list-v2&envId=string&status=SOLVED
 class Solution:
     def generateParenthesis(self, n):
         def backtrack(current, open_count, close_count):

@@ -1,3 +1,4 @@
+# https://leetcode.com/problems/design-add-and-search-words-data-structure/description/?envType=problem-list-v2&envId=string&status=SOLVED
 class WordDictionary(object):
 
     def __init__(self):

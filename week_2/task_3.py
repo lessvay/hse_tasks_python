@@ -1,3 +1,4 @@
+# https://leetcode.com/problems/integer-to-english-words/description/?envType=problem-list-v2&envId=string&status=SOLVED
 class Solution(object):
     Words = {
         0: "Zero",
@@ -35,31 +36,39 @@ class Solution(object):
     }
 
     def number_to_thousands(self, num):
-        number_of_thousands = 0
         thousands = []
+        number_of_thousands = 0
+
         while num > 0:
             current_number = num % 1000
-            thousands.append(
-                {
-                    "current_number": current_number,
-                    "number_of_thousands": number_of_thousands,
-                }
-            )
+            if current_number > 0:
+                thousands.append(
+                    {
+                        "current_number": current_number,
+                        "number_of_thousands": number_of_thousands,
+                    }
+                )
             number_of_thousands += 1
-            num = num // 1000
+            num //= 1000
         return thousands[::-1]
 
-    def thousands_to_tens(self, num):
-        tens = []
-        number_of_tens = 0
-        while num > 0:
-            current_number = num % 10
-            tens.append(
-                {"current_number": current_number, "number_of_tens": number_of_tens}
+    def number_below_thousand(self, num):
+        if num == 0:
+            return ""
+        elif num < 20:
+            return self.Words[num]
+        elif num < 100:
+            tens = num // 10 * 10
+            rest = num % 10
+            return self.Words[tens] + ("" if rest == 0 else " " + self.Words[rest])
+        else:
+            hundreds = num // 100
+            rest = num % 100
+            return (
+                self.Words[hundreds]
+                + " Hundred"
+                + ("" if rest == 0 else " " + self.number_below_thousand(rest))
             )
-            num = num // 10
-            number_of_tens += 1
-        return tens[::-1]
 
     def numberToWords(self, num):
         """
@@ -76,61 +85,14 @@ class Solution(object):
             current_thousand = thousand["current_number"]
             number_of_thousands = thousand["number_of_thousands"]
 
-            if number_of_thousands > 0:
-                if current_thousand < 20:
-                    word_string += (
-                        " "
-                        + self.Words[current_thousand]
-                        + " "
-                        + self.Words[1000**number_of_thousands]
-                    )
-                else:
-                    tens = self.thousands_to_tens(current_thousand)
-                    for ten in tens:
-                        current_ten = ten["current_number"]
-                        number_of_tens = ten["number_of_tens"]
-
-                        if number_of_tens == 0 or number_of_tens == 1:
-                            word_string += (
-                                " " + self.Words[current_ten * 10**number_of_tens]
-                            )
-                        else:
-                            word_string += (
-                                " "
-                                + self.Words[current_ten]
-                                + " "
-                                + self.Words[10**number_of_tens]
-                            )
-
-                    word_string += " " + self.Words[1000**number_of_thousands]
+            if number_of_thousands == 0:
+                word_string += self.number_below_thousand(current_thousand)
             else:
-                # # if current_thousand<=20:
-                # #     word_string+=' '+self.Words[current_thousand]
-                # # elif (current_thousand%10==0 and current_thousand!=100):
-                # #     word_string+=' '+self.Words[current_thousand]
-                # else:
-                tens = self.thousands_to_tens(current_thousand)
-                for ten in tens:
-                    current_ten = ten["current_number"]
-                    number_of_tens = ten["number_of_tens"]
-                    if (
-                        number_of_tens == 0
-                        or number_of_tens == 1
-                        and current_ten * 10**number_of_tens >= 20
-                    ):
-                        word_string += (
-                            " " + self.Words[current_ten * 10**number_of_tens]
-                        )
-                    else:
-                        word_string += (
-                            " "
-                            + self.Words[current_ten]
-                            + " "
-                            + self.Words[10**number_of_tens]
-                        )
+                word_string += (
+                    self.number_below_thousand(current_thousand)
+                    + " "
+                    + self.Words[1000**number_of_thousands]
+                    + " "
+                )
 
         return word_string.strip()
-
-
-solution = Solution()
-print(solution.numberToWords(1000000))
