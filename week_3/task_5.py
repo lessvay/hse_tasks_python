@@ -1,3 +1,4 @@
+# https://leetcode.com/problems/word-break/description/?envType=problem-list-v2&envId=array&status=SOLVED
 class Solution(object):
     """
     :type s: str
