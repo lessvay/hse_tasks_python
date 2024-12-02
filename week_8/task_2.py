@@ -1,16 +1,16 @@
-# leetcode.com/problem-list/sliding-window/https://leetcode.com/problems/minimum-size-subarray-sum/?envType=problem-list-v2&envId=sliding-window&difficulty=MEDIUM
 class Solution:
-    def minSubArrayLen(self, target: int, nums: list[int]) -> int:
+    def minSubArrayLen(self, target: int, nums) -> int:
         n = len(nums)
-        start = 0
-        curr_sum = 0
-        min_l = 10**9
+        ans = float("inf")
 
-        for end in range(n):
-            curr_sum += nums[end]
-            while curr_sum >= target:
-                min_l = min(min_l, end - start + 1)
-                curr_sum -= nums[start]
-                start += 1
+        for i in range(n):
+            sum = 0
 
-        return min_l if min_l != 10**9 else 0
+            for j in range(i, n):
+                sum += nums[j]
+
+                if sum >= target:
+                    ans = min(ans, j - i + 1)
+                    break
+
+        return 0 if ans == float("inf") else ans
